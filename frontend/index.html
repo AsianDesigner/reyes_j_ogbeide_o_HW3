@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste of Africa</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="header">
+            TASTE OF AFRICA
+        </div>
+        
+            <!-- Food Grid -->
+            <div v-if="!loading && !error" class="food-grid">
+                <div v-for="food in foods" :key="food.id" class="food-card" @click="viewDetails(food.id)">
+                    <img :src="getImageUrl(food.image_url)" :alt="food.name" class="food-image">
+                    <div class="food-title">{{ food.name }}</div>
+                    <div class="food-description">{{ food.short_description }}</div>
+                    <a class="btn">View Details</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Details Modal -->
+        <div v-if="showModal" class="modal-overlay" @click="closeModal">
+            <div class="modal-content" @click.stop>
+                <div v-if="loadingDetails" class="loader">
+                    <div class="spinner"></div>
+                    <p>Loading details...</p>
+                </div>
+
+                <div v-else-if="detailsError" class="error-message">
+                    {{ detailsError }}
+                </div>
+
+                <div v-else>
+                    <div class="modal-header">
+                        <h2>{{ selectedFood.name }}</h2>
+                        <button class="close-btn" @click="closeModal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <img :src="getImageUrl(selectedFood.image_url)" :alt="selectedFood.name" class="modal-image">
+                        <h3>Description</h3>
+                        <p>{{ selectedFood.description }}</p>
+                        <h3>Ingredients</h3>
+                        <ul>
+                            <li v-for="(ingredient, index) in selectedFood.ingredients" :key="index">
+                                {{ ingredient }}
+                            </li>
+                        </ul>
+                        <h3>Preparation</h3>
+                        <p>{{ selectedFood.preparation }}</p>
+                        <h3>Region</h3>
+                        <p>{{ selectedFood.region }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="Instagram">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v7/icons/instagram.svg" alt="Instagram">
+                </a>
+                <a href="#" class="social-icon" aria-label="Facebook">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v7/icons/facebook.svg" alt="Facebook">
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
