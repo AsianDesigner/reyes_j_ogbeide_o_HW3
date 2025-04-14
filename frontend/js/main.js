@@ -8,7 +8,7 @@ new Vue({
         selectedFood: null,
         loadingDetails: false,
         detailsError: null,
-        apiBaseUrl: 'http://localhost/taste_of_africa/api/public/'
+        apiBaseUrl: 'http://localhost/reyes_j_ogbeide_o_HW3/api/public/'
     },
     mounted() {
         this.fetchFoods();
@@ -104,5 +104,69 @@ new Vue({
                     this.loadingDetails = false;
                 });
         },
+        viewDetails(foodId) {
+            this.loadingDetails = true;
+            this.detailsError = null;
+            this.showModal = true;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            
+            // Log the request
+            console.log("Fetching details for food ID:", foodId);
+            
+            axios.get(`${this.apiBaseUrl}foods/${foodId}`)
+                .then(response => {
+                    console.log("Food details response:", response.data);
+                    
+                    // Parse ingredients
+                    this.selectedFood = this.parseIngredients(response.data);
+                    this.loadingDetails = false;
+                    
+                    this.$nextTick(() => {
+                        this.animateModal();
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching food details:', err);
+                    this.detailsError = 'Failed to load food details. Please try again later.';
+                    this.loadingDetails = false;
+                });
+        },
+        closeModal() {
+            gsap.to('.modal-content', {
+                duration: 0.3,
+                scale: 0.9,
+                opacity: 0,
+                onComplete: () => {
+                    this.showModal = false;
+                    this.selectedFood = null;
+                    document.body.style.overflow = ''; // Re-enable scrolling
+                }
+            });
+        },
+        animateHeader() {
+            gsap.from('.header', {
+                duration: 1,
+                y: -50,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+        },
+        animateFoodCards() {
+            gsap.from('.food-card', {
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+        },
+        animateModal() {
+            gsap.from('.modal-content', {
+                duration: 0.5,
+                opacity: 0,
+                scale: 0.8,
+                ease: 'back.out(1.7)'
+            });
+        }
     }
 });
