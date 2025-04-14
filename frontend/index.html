@@ -16,7 +16,7 @@
         <div class="header">
             TASTE OF AFRICA
         </div>
-        
+
             <!-- Food Grid -->
             <div v-if="!loading && !error" class="food-grid">
                 <div v-for="food in foods" :key="food.id" class="food-card" @click="viewDetails(food.id)">
