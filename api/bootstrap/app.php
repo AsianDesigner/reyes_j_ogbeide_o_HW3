@@ -48,8 +48,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -62,6 +60,7 @@ $app->singleton(
 */
 
 $app->configure('app');
+$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------
@@ -76,17 +75,11 @@ $app->configure('app');
 
 $app->middleware([
     App\Http\Middleware\CorsMiddleware::class
- ]);
+]);
 
-/*
-
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'cors' => App\Http\Middleware\CorsMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
