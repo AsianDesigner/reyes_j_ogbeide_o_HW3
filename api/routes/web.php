@@ -2,39 +2,28 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
-
-
-//matches localhost:8888/lumen/public/
+// Root route that welcomes users to the API
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return response()->json([
+        'message' => 'Welcome to Taste of Africa API', 
+        'status' => 'online',
+        'endpoints' => [
+            'GET /foods' => 'List all foods',
+            'GET /foods/{id}' => 'Get specific food details'
+        ]
+    ]);
 });
 
-$router->get('/books', 'BookController@getAll');
-$router->get('/books/{id}', 'BookController@getOne');
-$router->post('/books/add', 'BookController@save');
-$router->post('/books/edit/{id}', 'BookController@update');
-$router->delete('/books/delete/{id}', 'BookController@delete');
+// Health check route
+$router->get('/health', function () {
+    return response()->json([
+        'status' => 'ok', 
+        'message' => 'API is running'
+    ]);
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Food routes
+$router->group(['prefix' => 'foods'], function () use ($router) {
+    $router->get('/', 'FoodController@index');
+    $router->get('/{id}', 'FoodController@show');
+});
