@@ -17,6 +17,18 @@
             TASTE OF AFRICA
         </div>
 
+        <div class="container">
+            <!-- Loading Indicator -->
+            <div v-if="loading" class="loader">
+                <div class="spinner"></div>
+                <p>Loading Nigerian Cuisine...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div v-if="error" class="error-message">
+                {{ error }}
+            </div>
+
             <!-- Food Grid -->
             <div v-if="!loading && !error" class="food-grid">
                 <div v-for="food in foods" :key="food.id" class="food-card" @click="viewDetails(food.id)">
